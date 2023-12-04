@@ -1,0 +1,174 @@
+[gd_scene load_steps=15 format=3 uid="uid://dwetpv8hrdv3u"]
+
+[ext_resource type="Texture2D" uid="uid://dmms2gt5clihc" path="res://SpaceShooterAssets/SpaceShooterAssetPack_Ships.png" id="1_b36i4"]
+[ext_resource type="Texture2D" uid="uid://80t5n2e38nca" path="res://SpaceShooterAssets/SpaceShooterAssetPack_Miscellaneous.png" id="2_fqpin"]
+[ext_resource type="PackedScene" uid="uid://dopjcnrah4ldf" path="res://bulletprefab.tscn" id="3_1mqf1"]
+
+[sub_resource type="GDScript" id="GDScript_hrp13"]
+script/source = "extends Area2D
+
+@export var speed = 200
+var shoot_scene = preload(\"res://bulletprefab.tscn\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	var velocity = Vector2.ZERO
+	if Input.is_action_pressed(\"move right\"):
+		velocity.x += 1
+	if Input.is_action_pressed(\"move_left\"):
+		velocity.x -= 1
+	if Input.is_action_pressed(\"move_up\"):
+		velocity.y -= 1
+	if Input.is_action_pressed(\"move_down\"):
+		velocity.y += 1
+		
+	if velocity.x > 0:
+		$ship.play(\"right\")
+		$boost.position = $ship.position + Vector2(5, 35)
+		$boost.play(\"move\")
+	elif velocity.x < 0:
+		$ship.play(\"left\")
+		$boost.position = $ship.position + Vector2(-5, 35)
+		$boost.play(\"move\")
+	else:
+		$ship.play(\"straight\")
+		$boost.position = $ship.position + Vector2(0, 35)
+	
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * delta
+		
+	position += velocity * speed
+	position = position.clamp(Vector2(0,300), Vector2(480,720))
+	
+	if Input.is_action_pressed(\"shoot\"):
+		shoot_bullet($left_cannon)
+		shoot_bullet($right_cannon)
+	
+func shoot_bullet(shoot):
+	var shoot = shoot_scene.instance()
+	shoot.position = $left_cannon.position  # Posición del cañón
+	shoot.dirección = Vector2(1, 0)  # Dirección en la que se dispara (personalizable)
+	add_child(shoot)  # Agrega la bala al escenario
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qh458"]
+radius = 19.0
+height = 40.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgea0"]
+atlas = ExtResource("1_b36i4")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwkxm"]
+atlas = ExtResource("1_b36i4")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b2sba"]
+atlas = ExtResource("1_b36i4")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w5lkj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgea0")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwkxm")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b2sba")
+}],
+"loop": true,
+"name": &"straight",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1j4e"]
+atlas = ExtResource("2_fqpin")
+region = Rect2(40, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4c74"]
+atlas = ExtResource("2_fqpin")
+region = Rect2(48, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0ghs"]
+atlas = ExtResource("2_fqpin")
+region = Rect2(56, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a7c3g"]
+atlas = ExtResource("2_fqpin")
+region = Rect2(64, 8, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bxjho"]
+animations = [{
+"frames": [{
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_p1j4e")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_f4c74")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_e0ghs")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_a7c3g")
+}],
+"loop": true,
+"name": &"move",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": true,
+"name": &"stop",
+"speed": 5.0
+}]
+
+[node name="player" type="Area2D"]
+position = Vector2(237, 616)
+script = SubResource("GDScript_hrp13")
+speed = null
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CapsuleShape2D_qh458")
+
+[node name="ship" type="AnimatedSprite2D" parent="."]
+visibility_layer = 2
+z_index = 1
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_w5lkj")
+animation = &"straight"
+
+[node name="boost" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 35)
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_bxjho")
+animation = &"move"
+frame_progress = 0.327457
+
+[node name="bulletprefab2" parent="." instance=ExtResource("3_1mqf1")]
+
+[node name="left_cannon" type="Marker2D" parent="."]
+
+[node name="right_cannon" type="Marker2D" parent="."]

@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://doligu80knafo"]
+
+[ext_resource type="PackedScene" uid="uid://bummrjixce2qk" path="res://mob1.tscn" id="1_qfu2s"]
+[ext_resource type="Script" path="res://enemy_pattern_1.gd" id="1_v36sb"]
+[ext_resource type="PackedScene" uid="uid://bxeqagkuv7b8k" path="res://mob2.tscn" id="2_wyy4n"]
+
+[sub_resource type="Curve2D" id="Curve2D_vdfuu"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -64, 64, 0, 0, 0, 0, 432, 64, 0, 0, 0, 0, 432, 128, 0, 0, 0, 0, -64, 128)
+}
+point_count = 4
+
+[node name="enemy_pattern1" type="Node2D"]
+script = ExtResource("1_v36sb")
+mob1 = ExtResource("1_qfu2s")
+mob2 = ExtResource("2_wyy4n")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_vdfuu")
+
+[node name="mob1" parent="Path2D" instance=ExtResource("1_qfu2s")]
+visible = false
+position = Vector2(45.9994, 64)
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D/mob1"]
+progress = 110.0
+rotates = false
+loop = false
+
+[node name="mob2" parent="Path2D" instance=ExtResource("2_wyy4n")]
+visible = false
+position = Vector2(45.9994, 64)

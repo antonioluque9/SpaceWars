@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://c5fe63hkeydba"]
+
+[ext_resource type="Texture2D" uid="uid://yjw0b3laovsq" path="res://SpaceShooterAssets/SpaceShooterAssetPack_IU.png" id="1_a4x4m"]
+[ext_resource type="Script" path="res://HUD.gd" id="1_hs1yu"]
+[ext_resource type="PackedScene" uid="uid://bummrjixce2qk" path="res://mob1.tscn" id="2_0oxe3"]
+[ext_resource type="FontFile" uid="uid://cf1jho08gcpkn" path="res://font/space_invaders.ttf" id="2_squcy"]
+[ext_resource type="PackedScene" uid="uid://bxeqagkuv7b8k" path="res://mob2.tscn" id="3_r1gkf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uh5e7"]
+atlas = ExtResource("1_a4x4m")
+region = Rect2(137, 14, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_852hh"]
+atlas = ExtResource("1_a4x4m")
+region = Rect2(149, 14, 12, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_if6pc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uh5e7")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_852hh")
+}],
+"loop": true,
+"name": &"press",
+"speed": 5.0
+}]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hs1yu")
+mob1 = ExtResource("2_0oxe3")
+mob2 = ExtResource("3_r1gkf")
+
+[node name="menu" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="menu"]
+sprite_frames = SubResource("SpriteFrames_if6pc")
+animation = &"press"
+
+[node name="points" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -107.0
+offset_top = 8.0
+offset_right = -5.0
+offset_bottom = 32.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_squcy")
+theme_override_font_sizes/font_size = 15
+text = "estoy aqui"

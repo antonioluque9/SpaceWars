@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://dopjcnrah4ldf"]
+
+[ext_resource type="Texture2D" uid="uid://dbslthjbw7jv0" path="res://SpaceShooterAssets/SpaceShooterAssetPack_Projectiles.png" id="1_gryiy"]
+
+[sub_resource type="GDScript" id="GDScript_iyk8y"]
+script/source = "extends Area2D
+
+@export var speed = 800
+@export var direction = Vector2(0,-1)
+# Called when the node enters the scene tree for the first time.
+func start(pos):
+	set_collision_layer_value(5, true)
+	position = pos
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	position += direction * speed * delta
+	print(get_collision_layer())
+	
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	queue_free()
+
+func _on_area_entered(area):
+	queue_free()
+
+func set_layer_and_mask(layer, mask):
+	pass
+
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdprf"]
+size = Vector2(5, 14)
+
+[node name="bulletprefab" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = SubResource("GDScript_iyk8y")
+
+[node name="bullet" type="Sprite2D" parent="."]
+scale = Vector2(5, 5)
+texture = ExtResource("1_gryiy")
+hframes = 48
+vframes = 14
+frame = 19
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_fdprf")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

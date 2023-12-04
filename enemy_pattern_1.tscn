@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://bhps1dnew8wko"]
+
+[ext_resource type="Script" path="res://enemy_pattern_1.gd" id="1_xmyi8"]
+[ext_resource type="PackedScene" uid="uid://cnkwkogvgogf5" path="res://enemy_path.tscn" id="4_cpf23"]
+
+[sub_resource type="Curve2D" id="Curve2D_4yjmc"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -64, 64, 0, 0, 0, 0, 432, 64, 0, 0, 0, 0, 432, 128, 0, 0, 0, 0, -64, 128)
+}
+point_count = 4
+
+[node name="enemy_pattern1" type="Node2D"]
+script = ExtResource("1_xmyi8")
+enemy_path = ExtResource("4_cpf23")
+
+[node name="route" type="Path2D" parent="."]
+curve = SubResource("Curve2D_4yjmc")
+
+[node name="leave_timer" type="Timer" parent="."]
+wait_time = 20.0
+one_shot = true
+
+[node name="spawn_timer" type="Timer" parent="."]
+wait_time = 0.46
+autostart = true
+
+[connection signal="timeout" from="leave_timer" to="." method="_on_leave_timer_timeout"]
+[connection signal="timeout" from="spawn_timer" to="." method="_on_spawn_timer_timeout"]

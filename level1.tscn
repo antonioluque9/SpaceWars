@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dikm51g0b5tge"]
+
+[ext_resource type="Script" path="res://level.gd" id="1_sv235"]
+[ext_resource type="Script" path="res://background.gd" id="2_a2n0v"]
+[ext_resource type="Texture2D" uid="uid://bcyoeadpvk8po" path="res://SpaceShooterAssets/SpaceShooterAssetPack_BackGrounds.png" id="3_5yfp6"]
+[ext_resource type="PackedScene" uid="uid://bhps1dnew8wko" path="res://enemy_pattern_1.tscn" id="4_12ihq"]
+
+[node name="level1" type="Node2D"]
+script = ExtResource("1_sv235")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource("2_a2n0v")
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 720)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(3.75, 3.75)
+texture = ExtResource("3_5yfp6")
+centered = false
+hframes = 3
+vframes = 2
+
+[node name="enemy_pattern1" parent="." instance=ExtResource("4_12ihq")]

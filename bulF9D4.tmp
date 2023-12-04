@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://dopjcnrah4ldf"]
+
+[ext_resource type="Texture2D" uid="uid://dbslthjbw7jv0" path="res://SpaceShooterAssets/SpaceShooterAssetPack_Projectiles.png" id="1_gryiy"]
+
+[sub_resource type="GDScript" id="GDScript_iyk8y"]
+script/source = "extends Area2D
+
+var speed = 250
+var direction = Vector2(0,-1)
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	position += direction * speed * delta
+	
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdprf"]
+size = Vector2(5, 13)
+
+[node name="bulletprefab2" type="Area2D"]
+script = SubResource("GDScript_iyk8y")
+
+[node name="bullet" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(5, 5)
+texture = ExtResource("1_gryiy")
+hframes = 48
+vframes = 14
+frame = 19
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-7.5, -12.5)
+shape = SubResource("RectangleShape2D_fdprf")
